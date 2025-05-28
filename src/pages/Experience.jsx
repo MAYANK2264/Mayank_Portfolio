@@ -19,16 +19,25 @@ const ExperienceCard = ({ experience }) => {
       contentArrowStyle={{ borderRight: '7px solid rgba(99, 102, 241, 0.2)' }}
       date={experience.date}
       iconStyle={{ background: type.color }}
-      icon={<experience.icon />}
+      icon={<type.icon className="w-3.5 h-3.5" />}
     >
       <div>
         <h3 className="text-xl font-bold">{experience.title}</h3>
-        <p className="text-secondary text-base font-semibold">
+        <p className="text-secondary text-base font-semibold mt-1">
           {experience.company} • {experience.location}
         </p>
         <p className="mt-4 text-secondary text-sm leading-relaxed">
           {experience.description}
         </p>
+        
+        <ul className="mt-4 list-disc list-inside space-y-2">
+          {experience.points.map((point, index) => (
+            <li key={index} className="text-sm text-secondary leading-relaxed pl-2">
+              {point}
+            </li>
+          ))}
+        </ul>
+
         <div className="mt-4 flex flex-wrap gap-2">
           {experience.tags.map((tag) => (
             <span
@@ -52,14 +61,14 @@ const Experience = () => {
     : experiences.filter(exp => exp.type === activeFilter);
 
   return (
-    <div className="relative z-0">
+    <div className="relative z-0 min-h-screen py-16 px-4">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-center mb-4">
+          <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-transparent bg-clip-text">
             My Journey
           </h2>
           <p className="text-secondary text-lg max-w-2xl mx-auto">

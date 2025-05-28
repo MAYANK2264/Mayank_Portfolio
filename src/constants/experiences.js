@@ -1,67 +1,70 @@
 import { FaBriefcase, FaGraduationCap, FaCertificate } from 'react-icons/fa';
 
-export const experiences = [
+const experiences = [
   {
-    type: 'work',
-    title: "Senior Full Stack Developer",
-    company: "Tech Innovations Inc.",
-    location: "San Francisco, CA",
-    description: "Led development of cloud-based enterprise applications using React, Node.js, and AWS. Improved system performance by 40% through optimization.",
-    date: "2021 - Present",
-    icon: FaBriefcase,
-    tags: ["React", "Node.js", "AWS", "MongoDB"]
-  },
-  {
-    type: 'work',
-    title: "Frontend Developer",
-    company: "Digital Solutions Ltd.",
+    title: "Software Engineer Intern",
+    company: "Ecub",
     location: "Remote",
-    description: "Developed responsive web applications using React and TypeScript. Implemented CI/CD pipelines and reduced deployment time by 60%.",
-    date: "2019 - 2021",
+    type: "work",
     icon: FaBriefcase,
-    tags: ["React", "TypeScript", "CI/CD", "Jest"]
+    description: "Developed automated testing pipelines and contributed to a mental wellness platform using MERN stack.",
+    date: "Jun 2024 - Aug 2024",
+    tags: ["Python", "PowerShell", "Jenkins", "React.js", "Node.js", "MongoDB"],
+    points: [
+      "Developed automated unit testing pipeline using Python & PowerShell; reduced manual QA time by 40%.",
+      "Implemented CI/CD workflows via Jenkins; deployed firmware, aggregated XML logs, and created web-based visual dashboards using HTML/CSS.",
+      "Collaboratively built XHaustion – a mental wellness productivity platform using MERN stack (React.js, Node.js, Express.js, MongoDB).",
+      "Live Demo: https://xh-austion-main-p1s575qst-mayank2264s-projects.vercel.app/",
+    ],
   },
   {
-    type: 'education',
-    title: "Master of Computer Science",
-    company: "Stanford University",
-    location: "Stanford, CA",
-    description: "Specialized in Artificial Intelligence and Machine Learning. Graduated with honors.",
-    date: "2017 - 2019",
+    title: "Chief Executive",
+    company: "INDOMINUS Sports Club",
+    location: "IIIT Surat",
+    type: "work",
+    icon: FaBriefcase,
+    description: "Led a 40+ member sports club, organizing events and managing large-scale tournaments.",
+    date: "Aug 2024 - Present",
+    tags: ["Leadership", "Event Management", "Budget Planning", "Team Coordination"],
+    points: [
+      "Managed a 40+ member club, organized 10+ events including esports, sports fests, and orientation drives.",
+      "Directed ₹80k+ budget and logistics for the 5-day IIIT Surat Sports Tournament with 400+ participants.",
+      "Led delegation of 81 students to Inter-IIIT Gwalior, handling ticketing, food, and accommodation coordination.",
+    ],
+  },
+  {
+    title: "B.Tech in Computer Science",
+    company: "Indian Institute of Information Technology, Surat",
+    location: "Surat, Gujarat",
+    type: "education",
     icon: FaGraduationCap,
-    tags: ["AI", "ML", "Computer Vision"]
+    description: "Pursuing B.Tech in Computer Science with focus on software development and AI/ML.",
+    date: "Dec 2022 - Jun 2026",
+    tags: ["Computer Science", "Software Engineering", "AI/ML", "Data Structures"],
+    points: [
+      "Maintaining a strong academic record with focus on computer science fundamentals",
+      "Active participant in coding competitions and hackathons",
+      "Core member of the college's technical community",
+    ],
   },
   {
-    type: 'education',
-    title: "Bachelor of Computer Science",
-    company: "MIT",
-    location: "Cambridge, MA",
-    description: "Major in Computer Science with minor in Mathematics. Dean's List all semesters.",
-    date: "2013 - 2017",
-    icon: FaGraduationCap,
-    tags: ["Computer Science", "Mathematics"]
-  },
-  {
-    type: 'certification',
-    title: "AWS Solutions Architect Professional",
-    company: "Amazon Web Services",
+    title: "Full Stack Development",
+    company: "Udemy",
     location: "Online",
-    description: "Advanced certification in AWS architecture and cloud solutions design.",
-    date: "2022",
+    type: "certification",
     icon: FaCertificate,
-    tags: ["AWS", "Cloud Architecture"]
+    description: "Comprehensive certification in modern full-stack web development.",
+    date: "Jan 2024",
+    tags: ["React.js", "Node.js", "MongoDB", "Express.js", "REST APIs"],
+    points: [
+      "Mastered MERN stack development with practical projects",
+      "Implemented authentication, API integration, and database management",
+      "Created responsive and accessible web applications",
+    ],
   },
-  {
-    type: 'certification',
-    title: "Google Cloud Professional Developer",
-    company: "Google",
-    location: "Online",
-    description: "Professional certification in Google Cloud Platform development and architecture.",
-    date: "2021",
-    icon: FaCertificate,
-    tags: ["GCP", "Cloud Development"]
-  }
 ];
+
+export { experiences };
 
 export const experienceTypes = {
   work: {

@@ -1,81 +1,82 @@
 import { FaReact, FaNode, FaAws, FaDocker } from 'react-icons/fa';
 import { SiMongodb, SiTypescript, SiTailwindcss, SiFirebase } from 'react-icons/si';
 
-export const projects = [
+const projects = [
   {
-    title: "AI-Powered Task Manager",
-    description: "Smart task management application with AI-driven prioritization, real-time collaboration, and automated scheduling features.",
-    image: "/projects/task-manager.jpg",
+    name: "SkySync Weather App",
+    description: "A real-time weather dashboard with 98% accuracy using OpenWeather API and GeminiAI-based alerts. Features user authentication with Clerk and uses Drizzle ORM + PostgreSQL to store 100+ location queries.",
     tags: [
-      { name: "React", icon: FaReact, color: "#61DAFB" },
-      { name: "Node.js", icon: FaNode, color: "#339933" },
-      { name: "MongoDB", icon: SiMongodb, color: "#47A248" },
-      { name: "TypeScript", icon: SiTypescript, color: "#3178C6" }
+      {
+        name: "next.js",
+        color: "blue-text-gradient",
+      },
+      {
+        name: "gemini-ai",
+        color: "green-text-gradient",
+      },
+      {
+        name: "postgresql",
+        color: "pink-text-gradient",
+      },
+      {
+        name: "tailwind",
+        color: "blue-text-gradient",
+      },
+      {
+        name: "clerk",
+        color: "green-text-gradient",
+      },
     ],
-    source_code: "https://github.com/yourusername/ai-task-manager",
-    live_demo: "https://ai-task-manager.demo.com",
-    highlights: [
-      "AI-powered task prioritization",
-      "Real-time collaboration features",
-      "Automated scheduling system",
-      "Interactive dashboard with analytics"
-    ]
+    image: "/projects/skysync.png",
+    source_code_link: "https://github.com/MAYANK2264/skysync",
+    live_demo_link: "https://skysyncweatherforecasting.netlify.app/",
   },
   {
-    title: "E-Commerce Platform",
-    description: "Full-featured e-commerce platform with real-time inventory management, payment processing, and analytics dashboard.",
-    image: "/projects/ecommerce.jpg",
+    name: "YourPlaces",
+    description: "A social geo-tagging platform allowing users to share 200+ locations with photos. Features CRUD operations, Firebase file storage, and dynamic location tagging via Ola Maps API.",
     tags: [
-      { name: "React", icon: FaReact, color: "#61DAFB" },
-      { name: "Node.js", icon: FaNode, color: "#339933" },
-      { name: "AWS", icon: FaAws, color: "#FF9900" },
-      { name: "Tailwind", icon: SiTailwindcss, color: "#06B6D4" }
+      {
+        name: "react",
+        color: "blue-text-gradient",
+      },
+      {
+        name: "mongodb",
+        color: "green-text-gradient",
+      },
+      {
+        name: "firebase",
+        color: "pink-text-gradient",
+      },
+      {
+        name: "ola-maps",
+        color: "blue-text-gradient",
+      },
     ],
-    source_code: "https://github.com/yourusername/ecommerce-platform",
-    live_demo: "https://ecommerce-platform.demo.com",
-    highlights: [
-      "Real-time inventory tracking",
-      "Secure payment processing",
-      "Admin dashboard with analytics",
-      "Mobile-responsive design"
-    ]
+    image: "/projects/yourplaces.png",
+    source_code_link: "https://github.com/MAYANK2264/yourplaces",
+    live_demo_link: "https://yourplaces1733.netlify.app/",
   },
   {
-    title: "Cloud File Manager",
-    description: "Secure cloud storage solution with file sharing, version control, and real-time collaboration capabilities.",
-    image: "/projects/cloud-manager.jpg",
+    name: "JARVIS AI Assistant",
+    description: "An offline desktop assistant supporting voice commands, file automation, and GPT-style Q&A. Integrated Mistral 7B + GPT4All for LLM tasks with zero API dependence.",
     tags: [
-      { name: "React", icon: FaReact, color: "#61DAFB" },
-      { name: "Firebase", icon: SiFirebase, color: "#FFCA28" },
-      { name: "TypeScript", icon: SiTypescript, color: "#3178C6" },
-      { name: "Docker", icon: FaDocker, color: "#2496ED" }
+      {
+        name: "python",
+        color: "blue-text-gradient",
+      },
+      {
+        name: "mistral-7b",
+        color: "green-text-gradient",
+      },
+      {
+        name: "gpt4all",
+        color: "pink-text-gradient",
+      },
     ],
-    source_code: "https://github.com/yourusername/cloud-file-manager",
-    live_demo: "https://cloud-manager.demo.com",
-    highlights: [
-      "End-to-end encryption",
-      "Real-time collaboration",
-      "Version control system",
-      "Cross-platform compatibility"
-    ]
+    image: "/projects/jarvis.png",
+    source_code_link: "https://github.com/MAYANK2264/jarvis-ai-assistant",
+    live_demo_link: "https://jarvis-website-deploy-ppf5u741n-mayank2264s-projects.vercel.app",
   },
-  {
-    title: "Social Media Analytics",
-    description: "Advanced analytics platform for social media management with AI-powered insights and automated reporting.",
-    image: "/projects/social-analytics.jpg",
-    tags: [
-      { name: "React", icon: FaReact, color: "#61DAFB" },
-      { name: "Node.js", icon: FaNode, color: "#339933" },
-      { name: "AWS", icon: FaAws, color: "#FF9900" },
-      { name: "MongoDB", icon: SiMongodb, color: "#47A248" }
-    ],
-    source_code: "https://github.com/yourusername/social-analytics",
-    live_demo: "https://social-analytics.demo.com",
-    highlights: [
-      "AI-powered trend analysis",
-      "Automated report generation",
-      "Real-time data visualization",
-      "Multi-platform integration"
-    ]
-  }
-]; 
+];
+
+export { projects }; 

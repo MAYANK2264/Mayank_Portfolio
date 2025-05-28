@@ -1,113 +1,116 @@
 import { useCallback } from 'react';
 import Particles from '@tsparticles/react';
-import { loadSlim } from 'tsparticles-slim';
+import { loadFull } from "tsparticles";
 
 const ParticleBackground = () => {
-  const particlesInit = useCallback(async (engine) => {
-    await loadSlim(engine);
+  const particlesInit = useCallback(async engine => {
+    await loadFull(engine);
+  }, []);
+
+  const particlesLoaded = useCallback(async container => {
+    console.log("Particles loaded:", container);
   }, []);
 
   return (
     <Particles
-      className="absolute inset-0 -z-10"
+      id="tsparticles"
       init={particlesInit}
+      loaded={particlesLoaded}
       options={{
-        background: {
-          color: {
-            value: 'transparent',
-          },
-        },
-        fpsLimit: 120,
-        interactivity: {
-          events: {
-            onClick: {
-              enable: true,
-              mode: 'push',
-            },
-            onHover: {
-              enable: true,
-              mode: 'repulse',
-              parallax: {
-                enable: true,
-                force: 60,
-                smooth: 10
-              }
-            },
-            resize: true,
-          },
-          modes: {
-            push: {
-              quantity: 4,
-            },
-            repulse: {
-              distance: 200,
-              duration: 0.4,
-            },
-          },
-        },
         particles: {
-          color: {
-            value: ['#6366f1', '#8b5cf6', '#d946ef'],
-          },
-          links: {
-            color: '#6366f1',
-            distance: 150,
-            enable: true,
-            opacity: 0.3,
-            width: 1,
-            triangles: {
-              enable: true,
-              opacity: 0.05
-            }
-          },
-          move: {
-            direction: 'none',
-            enable: true,
-            outModes: {
-              default: 'bounce',
-            },
-            random: true,
-            speed: 1.5,
-            straight: false,
-            attract: {
-              enable: true,
-              rotateX: 600,
-              rotateY: 1200
-            }
-          },
           number: {
+            value: 100,
             density: {
               enable: true,
-              area: 800,
-            },
-            value: 80,
+              value_area: 800
+            }
+          },
+          color: {
+            value: "#915EFF"
+          },
+          shape: {
+            type: "circle"
           },
           opacity: {
             value: 0.5,
             random: true,
-            anim: {
+            animation: {
               enable: true,
               speed: 1,
-              opacity_min: 0.1,
+              minimumValue: 0.1,
               sync: false
             }
-          },
-          shape: {
-            type: ['circle', 'triangle', 'star'],
           },
           size: {
-            value: { min: 1, max: 3 },
+            value: 3,
             random: true,
-            anim: {
+            animation: {
               enable: true,
               speed: 2,
-              size_min: 0.1,
+              minimumValue: 0.1,
               sync: false
             }
           },
+          links: {
+            enable: true,
+            distance: 150,
+            color: "#915EFF",
+            opacity: 0.4,
+            width: 1
+          },
+          move: {
+            enable: true,
+            speed: 2,
+            direction: "none",
+            random: false,
+            straight: false,
+            outModes: {
+              default: "out"
+            },
+            attract: {
+              enable: false,
+              rotateX: 600,
+              rotateY: 1200
+            }
+          }
         },
-        detectRetina: true,
+        interactivity: {
+          detectsOn: "window",
+          events: {
+            onHover: {
+              enable: true,
+              mode: "grab"
+            },
+            onClick: {
+              enable: true,
+              mode: "push"
+            },
+            resize: true
+          },
+          modes: {
+            grab: {
+              distance: 140,
+              links: {
+                opacity: 1
+              }
+            },
+            push: {
+              quantity: 4
+            }
+          }
+        },
+        background: {
+          color: {
+            value: "transparent"
+          }
+        },
+        fullScreen: {
+          enable: false,
+          zIndex: -1
+        },
+        detectRetina: true
       }}
+      className="absolute inset-0 -z-10"
     />
   );
 };

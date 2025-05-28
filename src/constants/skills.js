@@ -21,171 +21,113 @@ import {
 } from 'react-icons/si';
 import { VscCode } from 'react-icons/vsc';
 
-export const skillCategories = [
+const skillCategories = [
   {
     title: "Technical Skills",
-    subtitle: "Programming Languages & Frameworks",
+    subtitle: "Programming languages and frameworks I work with",
     skills: [
       {
-        name: "HTML5/CSS3",
-        icon: FaHtml5,
-        level: 95,
-        color: "#E34F26",
-        description: "Semantic HTML, CSS3, Responsive Design"
+        name: "React.js",
+        description: "Building modern web applications with React and its ecosystem",
+        level: 90,
+        color: "#61DAFB",
+        icon: FaReact
       },
       {
         name: "JavaScript",
-        icon: FaJs,
-        level: 90,
-        color: "#F7DF1E",
-        description: "ES6+, DOM Manipulation, Async Programming"
-      },
-      {
-        name: "React",
-        icon: FaReact,
-        level: 92,
-        color: "#61DAFB",
-        description: "Hooks, Context, Custom Hooks"
-      },
-      {
-        name: "TypeScript",
-        icon: SiTypescript,
+        description: "Modern JavaScript (ES6+) development and best practices",
         level: 85,
-        color: "#3178C6",
-        description: "Type Safety, Interfaces, Generics"
+        color: "#F7DF1E",
+        icon: FaJs
       },
       {
         name: "Node.js",
-        icon: FaNodeJs,
-        level: 88,
+        description: "Server-side JavaScript and API development",
+        level: 80,
         color: "#339933",
-        description: "Express, REST APIs, Authentication"
+        icon: FaNodeJs
       },
       {
-        name: "Tailwind CSS",
-        icon: SiTailwindcss,
+        name: "TypeScript",
+        description: "Type-safe JavaScript development",
+        level: 75,
+        color: "#3178C6",
+        icon: SiTypescript
+      },
+      {
+        name: "HTML5/CSS3",
+        description: "Modern web development and responsive design",
         level: 90,
-        color: "#06B6D4",
-        description: "Responsive Design, Custom Themes"
-      },
-      {
-        name: "MongoDB",
-        icon: SiMongodb,
-        level: 85,
-        color: "#47A248",
-        description: "Schema Design, Aggregation, Indexing"
-      },
-      {
-        name: "Redux",
-        icon: SiRedux,
-        level: 88,
-        color: "#764ABC",
-        description: "State Management, Redux Toolkit"
+        color: "#E34F26",
+        icon: FaHtml5
       }
     ]
   },
   {
     title: "Soft Skills",
-    subtitle: "Professional & Interpersonal Abilities",
+    subtitle: "Personal and professional attributes",
     skills: [
       {
         name: "Problem Solving",
-        level: 95,
-        description: "Analytical thinking, Creative solutions",
+        description: "Analytical thinking and creative solution finding",
+        level: 90,
         category: "Critical Thinking"
       },
       {
         name: "Team Leadership",
-        level: 90,
-        description: "Project coordination, Team mentoring",
+        description: "Leading and motivating development teams",
+        level: 85,
         category: "Leadership"
       },
       {
         name: "Communication",
-        level: 92,
-        description: "Technical writing, Presentation skills",
-        category: "Communication"
-      },
-      {
-        name: "Collaboration",
-        level: 95,
-        description: "Cross-functional teamwork, Pair programming",
-        category: "Teamwork"
-      },
-      {
-        name: "Adaptability",
+        description: "Clear and effective technical communication",
         level: 88,
-        description: "Quick learning, Flexibility",
-        category: "Growth"
-      },
-      {
-        name: "Time Management",
-        level: 90,
-        description: "Project planning, Task prioritization",
-        category: "Organization"
+        category: "Interpersonal"
       }
     ]
   },
   {
     title: "Tools & Platforms",
-    subtitle: "Development & Collaboration Tools",
+    subtitle: "Development tools and platforms I'm proficient with",
     skills: [
       {
-        name: "VS Code",
-        icon: VscCode,
-        level: 95,
-        color: "#007ACC",
-        description: "Extensions, Debugging, Custom Settings"
-      },
-      {
-        name: "Git",
-        icon: FaGitAlt,
-        level: 92,
+        name: "Git & GitHub",
+        description: "Version control and collaborative development",
+        level: 90,
         color: "#F05032",
-        description: "Version Control, Branching Strategies"
+        icon: FaGitAlt
       },
       {
         name: "Docker",
-        icon: FaDocker,
-        level: 85,
+        description: "Containerization and deployment",
+        level: 75,
         color: "#2496ED",
-        description: "Containerization, Docker Compose"
+        icon: FaDocker
+      },
+      {
+        name: "MongoDB",
+        description: "NoSQL database design and management",
+        level: 80,
+        color: "#47A248",
+        icon: SiMongodb
       },
       {
         name: "AWS",
-        icon: FaAws,
-        level: 82,
+        description: "Cloud infrastructure and services",
+        level: 70,
         color: "#FF9900",
-        description: "EC2, S3, Lambda, CloudFront"
+        icon: FaAws
       },
       {
         name: "Figma",
-        icon: FaFigma,
-        level: 88,
-        color: "#F24E1E",
-        description: "UI Design, Prototyping, Components"
-      },
-      {
-        name: "Postman",
-        icon: SiPostman,
-        level: 90,
-        color: "#FF6C37",
-        description: "API Testing, Collections, Environments"
-      },
-      {
-        name: "Webpack",
-        icon: SiWebpack,
+        description: "UI/UX design and prototyping",
         level: 85,
-        color: "#8DD6F9",
-        description: "Module Bundling, Optimization"
-      },
-      {
-        name: "Firebase",
-        icon: SiFirebase,
-        level: 88,
-        color: "#FFCA28",
-        description: "Authentication, Hosting, Real-time DB"
+        color: "#F24E1E",
+        icon: FaFigma
       }
     ]
   }
-]; 
+];
+
+export { skillCategories }; 

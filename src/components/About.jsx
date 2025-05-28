@@ -42,29 +42,55 @@ ServiceCard.propTypes = {
 
 const About = () => {
   return (
-    <>
-      <motion.div variants={textVariant()}>
-        <p className={styles.sectionSubText}>Introduction</p>
-        <h2 className={styles.sectionHeadText}>Overview.</h2>
-      </motion.div>
+    <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-primary">
+      <div className="max-w-4xl w-full">
+        <h2 className="text-4xl font-bold text-center text-white mb-8">
+          About Me
+        </h2>
+        
+        <div className="bg-tertiary rounded-2xl p-8 shadow-card">
+          <div className="text-white">
+            <p className="text-lg mb-6">
+              I'm a Computer Science and Engineering student at Indian Institute of Information Technology Surat,
+              passionate about building innovative solutions that make a difference. Currently pursuing my B.Tech
+              (2022-2026), I specialize in full-stack development and AI/ML applications.
+            </p>
+            
+            <p className="text-lg mb-6">
+              As the Chief Executive of INDOMINUS Sports Club at IIIT Surat, I've developed strong leadership
+              and organizational skills, managing large-scale events and coordinating teams of 40+ members.
+            </p>
 
-      <motion.p
-        variants={fadeIn("", "", 0.1, 1)}
-        className='mt-4 text-secondary text-[17px] max-w-3xl leading-[30px]'
-      >
-        I'm a skilled software developer with experience in TypeScript and
-        JavaScript, and expertise in frameworks like React, Node.js, and
-        Three.js. I'm a quick learner and collaborate closely with clients to
-        create efficient, scalable, and user-friendly solutions that solve
-        real-world problems. Let's work together to bring your ideas to life!
-      </motion.p>
+            <p className="text-lg mb-6">
+              My technical expertise spans modern web technologies, AI/ML tools, and cloud platforms. I've worked
+              on projects ranging from weather forecasting applications to AI assistants, always focusing on
+              creating intuitive and efficient solutions.
+            </p>
 
-      <div className='mt-20 flex flex-wrap gap-10'>
-        {services.map((service, index) => (
-          <ServiceCard key={service.title} index={index} {...service} />
-        ))}
+            <div className="mt-8">
+              <h3 className="text-2xl font-semibold mb-4">Education</h3>
+              <div className="bg-black/50 rounded-lg p-6">
+                <h4 className="text-xl font-medium">Indian Institute of Information Technology Surat</h4>
+                <p className="text-gray-300 mt-2">B.Tech in Computer Science and Engineering</p>
+                <p className="text-gray-300">Dec 2022 - Jun 2026</p>
+                <p className="text-gray-300 mt-4">
+                  <span className="font-medium">Relevant Coursework:</span> Data Structures and Algorithms,
+                  OS, DBMS, Software Engineering, OOP, ML, Computer Networks, System Design
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-8">
+              <h3 className="text-2xl font-semibold mb-4">Certifications</h3>
+              <ul className="list-disc list-inside space-y-2 text-gray-300">
+                <li>AI For Everyone – Coursera (Andrew Ng)</li>
+                <li>Introduction to Product Management – Udemy</li>
+              </ul>
+            </div>
+          </div>
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 
