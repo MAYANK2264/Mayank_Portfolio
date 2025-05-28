@@ -1,20 +1,23 @@
 {
-  "name": "port",
+  "name": "my-portfolio",
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://MAYANK2264.github.io/MY_PORTFOLIO",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@emailjs/browser": "^4.3.3",
     "@react-three/drei": "^9.122.0",
     "@react-three/fiber": "^8.18.0",
     "@tsparticles/react": "^3.0.0",
-    "framer-motion": "^11.2.12",
+    "framer-motion": "^11.18.2",
     "maath": "^0.10.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -36,6 +39,7 @@
     "eslint-plugin-react": "^7.34.2",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",
+    "gh-pages": "^6.3.0",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.4",
     "vite": "^5.3.1"
