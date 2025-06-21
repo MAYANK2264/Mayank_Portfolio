@@ -4,7 +4,7 @@ A modern, responsive portfolio website built with React and Three.js, showcasing
 
 ## 🌟 Live Demo
 
-[View Live Website]([https://your-portfolio-url.vercel.app](https://mayank2264.github.io/MY_PORTFOLIO/))
+[View Live Website](https://mayank2264.github.io/MY_PORTFOLIO/)
 
 ## 🚀 Features
 
