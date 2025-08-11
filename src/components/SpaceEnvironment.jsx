@@ -102,7 +102,8 @@ const SpaceEnvironment = () => {
         blending: THREE.AdditiveBlending,
         vertexColors: true,
         transparent: true,
-        opacity: 0.8
+        opacity: 0.8,
+        map: null
       });
 
       // Cleanup old galaxy
@@ -148,7 +149,8 @@ const SpaceEnvironment = () => {
         blending: THREE.AdditiveBlending,
         vertexColors: true,
         transparent: true,
-        opacity: 0.8
+        opacity: 0.8,
+        map: null
       });
 
       const stars = new THREE.Points(starGeometry, starMaterial);

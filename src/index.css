@@ -483,3 +483,228 @@ html {
     filter: drop-shadow(0 4px 8px rgba(145, 94, 255, 0.7));
   }
 }
+
+/* Enhanced styles for the new interactive star navigation */
+.star-navigation-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.star-navigation-overlay * {
+  pointer-events: auto;
+}
+
+/* Star glow animation keyframes */
+@keyframes starGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 8px rgba(135, 206, 235, 0.8)) drop-shadow(0 0 16px rgba(74, 144, 226, 0.6));
+    transform: scale(1);
+  }
+  50% {
+    filter: drop-shadow(0 0 12px rgba(135, 206, 235, 1)) drop-shadow(0 0 24px rgba(74, 144, 226, 0.8));
+    transform: scale(1.05);
+  }
+}
+
+@keyframes starTwinkle {
+  0%, 100% { opacity: 0.8; }
+  25% { opacity: 1; }
+  50% { opacity: 0.9; }
+  75% { opacity: 1; }
+}
+
+/* Star hover effects */
+.navigation-star {
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  cursor: pointer;
+  animation: starTwinkle 4s ease-in-out infinite;
+}
+
+.navigation-star:hover {
+  animation: starGlow 1s ease-in-out infinite;
+  z-index: 100;
+}
+
+/* Enhanced welcome text styles */
+.enhanced-welcome-text {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 2px;
+  text-shadow: 
+    0 0 20px rgba(255, 255, 255, 0.5),
+    0 0 40px rgba(230, 230, 250, 0.3),
+    0 0 60px rgba(153, 50, 204, 0.2);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+}
+
+.portfolio-text {
+  background: linear-gradient(180deg, #E6E6FA 0%, #9932CC 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none !important;
+  filter: drop-shadow(0 0 20px rgba(153, 50, 204, 0.6));
+}
+
+/* Subtle animation for the entire star field */
+@keyframes floatUp {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.floating-stars {
+  animation: floatUp 6s ease-in-out infinite;
+}
+
+/* Responsive adjustments for star navigation */
+@media (max-width: 768px) {
+  .welcome-overlay {
+    padding: 0 2rem;
+  }
+  
+  .enhanced-welcome-text {
+    letter-spacing: 1px;
+  }
+}
+
+/* Improved visibility on different backgrounds */
+.star-tooltip {
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid rgba(74, 144, 226, 0.5);
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.3),
+    0 0 20px rgba(74, 144, 226, 0.2);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Simple Star Navigation Animations */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes starGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 20px #915eff) drop-shadow(0 0 40px #915eff);
+  }
+  50% {
+    filter: drop-shadow(0 0 30px #915eff) drop-shadow(0 0 60px #915eff) drop-shadow(0 0 80px #915eff);
+  }
+}
+
+/* Star shapes and effects - smaller size */
+.star-shape {
+  width: 24px;
+  height: 24px;
+  background: #ffffff;
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  filter: drop-shadow(0 0 12px #915eff) drop-shadow(0 0 24px #915eff);
+  animation: starGlow 3s ease-in-out infinite;
+}
+
+.star-glow {
+  position: absolute;
+  width: 36px;
+  height: 36px;
+  top: -6px;
+  left: -6px;
+  background: radial-gradient(circle, rgba(145, 94, 255, 0.6) 0%, rgba(145, 94, 255, 0.3) 50%, transparent 70%);
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite alternate;
+}
+
+.star-container:hover .star-shape {
+  animation: starGlow 1s ease-in-out infinite;
+}
+
+.star-container:hover .star-glow {
+  animation: pulse 0.5s ease-in-out infinite alternate;
+}
+
+/* Page transition styles */
+.page-transition-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #0c0c0c 0%, #1a0b2e 100%);
+  z-index: 9999;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.8s cubic-bezier(0.4, 0.0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-transition-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.transition-content {
+  text-align: center;
+  color: #915eff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-shadow: 0 0 20px rgba(145, 94, 255, 0.8);
+  animation: fadeInScale 0.6s ease-out;
+}
+
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Page fade-in animation */
+.page-fade-in {
+  animation: pageEntry 1.2s ease-out;
+}
+
+@keyframes pageEntry {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
