@@ -28,8 +28,9 @@ const SpaceEnvironment = () => {
   }), []);
 
   useEffect(() => {
-    // Scene setup with fog for depth
+    // Scene setup with fog for depth - darker background to match home
     sceneRef.current = new THREE.Scene();
+    sceneRef.current.background = new THREE.Color(0x000000); // Pure black background
     sceneRef.current.fog = new THREE.FogExp2(0x000000, 0.0001);
     
     cameraRef.current = new THREE.PerspectiveCamera(

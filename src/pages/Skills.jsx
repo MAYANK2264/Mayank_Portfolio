@@ -2,7 +2,7 @@ import { skillCategories } from '../constants/skills';
 import { BiBrain } from 'react-icons/bi';
 import { FaTools } from 'react-icons/fa';
 import { AiOutlineCode } from 'react-icons/ai';
-
+import SpaceEnvironment from '../components/SpaceEnvironment';
 
 const CategoryIcon = ({ category }) => {
   switch (category) {
@@ -119,12 +119,14 @@ const SkillCategory = ({ category, index }) => (
 
 const Skills = () => {
   return (
-    <div
-      className="min-h-screen py-16 px-4"
-    >
+    <div className="relative">
+      <SpaceEnvironment />
       <div
-        className="max-w-7xl mx-auto"
+        className="min-h-screen py-16 px-4 relative z-10"
       >
+        <div
+          className="max-w-7xl mx-auto"
+        >
         {/* Header */}
         <div
           className="text-center mb-16"
@@ -141,9 +143,10 @@ const Skills = () => {
         {skillCategories.map((category, index) => (
           <SkillCategory key={index} category={category} index={index} />
         ))}
+        </div>
       </div>
     </div>
   );
 };
 
-export default Skills; 
+export default Skills;

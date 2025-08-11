@@ -1,24 +1,27 @@
 import { FaCode, FaLightbulb, FaRocket, FaUserGraduate } from 'react-icons/fa';
+import SpaceEnvironment from '../components/SpaceEnvironment';
 
 const AboutCard = ({ icon: Icon, title, description, delay }) => (
   <div
-    className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
+    className="bg-black/20 backdrop-blur-sm p-6 rounded-xl border border-white/10 shadow-lg hover:shadow-xl hover:bg-black/30 transition-all"
   >
     <div className="flex items-center gap-4 mb-4">
-      <div className="p-3 bg-purple-100 dark:bg-purple-900 rounded-lg">
-        <Icon className="w-6 h-6 text-purple-600 dark:text-purple-300" />
+      <div className="p-3 bg-purple-500/20 rounded-lg">
+        <Icon className="w-6 h-6 text-purple-300" />
       </div>
-      <h3 className="text-xl font-semibold">{title}</h3>
+      <h3 className="text-xl font-semibold text-white">{title}</h3>
     </div>
-    <p className="text-gray-600 dark:text-gray-300">{description}</p>
+    <p className="text-gray-300">{description}</p>
   </div>
 );
 
 const About = () => {
   return (
-    <div 
-      className="min-h-screen py-16 px-4"
-    >
+    <div className="relative">
+      <SpaceEnvironment />
+      <div 
+        className="min-h-screen py-16 px-4 relative z-10"
+      >
       <div
         className="max-w-6xl mx-auto"
       >
@@ -149,7 +152,8 @@ const About = () => {
         </div>
       </div>
     </div>
+    </div>
   );
 };
 
-export default About; 
+export default About;

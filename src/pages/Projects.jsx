@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
-
+import SpaceEnvironment from '../components/SpaceEnvironment';
 import { projects } from '../constants/projects';
 
 // Use the real projects data from constants
@@ -76,12 +76,14 @@ const Projects = () => {
   );
 
   return (
-    <div 
-      className="min-h-screen py-16 px-4"
-    >
-      <div
-        className="max-w-6xl mx-auto"
+    <div className="relative">
+      <SpaceEnvironment />
+      <div 
+        className="min-h-screen py-16 px-4 relative z-10"
       >
+        <div
+          className="max-w-6xl mx-auto"
+        >
         <div
           className="text-center mb-16"
         >
@@ -115,6 +117,7 @@ const Projects = () => {
           {filteredProjects.map((project, index) => (
             <ProjectCard key={index} project={project} />
           ))}
+        </div>
         </div>
       </div>
     </div>

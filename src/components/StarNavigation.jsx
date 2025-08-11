@@ -1,9 +1,6 @@
-import { Suspense, useRef, useState, useEffect } from 'react';
+import { Suspense, useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { 
-  Text, 
-  OrbitControls 
-} from '@react-three/drei';
+import { OrbitControls, Html, Text } from '@react-three/drei';
 import { useNavigate } from 'react-router-dom';
 import * as THREE from 'three';
 
@@ -29,48 +26,45 @@ const generateStarPositions = (starCount, radius = 10, z = -5) => {
   return positions;
 };
 
-// AnimatedStar component with subtle orbital animation
-const AnimatedStar = ({ basePosition, route, label, orbitRadius = 0.5, orbitSpeed = 0.3 }) => {
+// NavigationStar component - Fixed position stars with hover tooltips for navigation
+const NavigationStar = ({ basePosition, route, label }) => {
   const navigate = useNavigate();
   const starRef = useRef();
   const glowRef = useRef();
-  const groupRef = useRef();
+  const [isHovered, setIsHovered] = useState(false);
   
-  // Add subtle orbital animation using useFrame
+  // Only subtle pulsing animation, no orbital motion
   useFrame((state) => {
-    if (groupRef.current) {
-      const time = state.clock.elapsedTime;
-      // Subtle orbital motion around the base position
-      const offsetX = Math.cos(time * orbitSpeed) * orbitRadius;
-      const offsetY = Math.sin(time * orbitSpeed * 0.7) * orbitRadius * 0.5; // Different frequency for Y
-      const offsetZ = Math.sin(time * orbitSpeed * 0.5) * orbitRadius * 0.3; // Even subtler Z motion
-      
-      groupRef.current.position.set(
-        basePosition[0] + offsetX,
-        basePosition[1] + offsetY,
-        basePosition[2] + offsetZ
-      );
+    const time = state.clock.elapsedTime;
+    
+    // Gentle pulsing glow effect
+    if (starRef.current && glowRef.current) {
+      const pulseIntensity = 1.0 + Math.sin(time * 1.5) * 0.2;
+      starRef.current.material.emissiveIntensity = pulseIntensity;
+      glowRef.current.material.emissiveIntensity = pulseIntensity * 0.6;
     }
   });
   
   const handlePointerOver = () => {
+    setIsHovered(true);
     if (starRef.current) {
-      starRef.current.scale.setScalar(1.5);
+      starRef.current.scale.setScalar(1.8);
     }
     if (glowRef.current) {
-      glowRef.current.scale.setScalar(1.8);
-      glowRef.current.material.emissiveIntensity = 0.8;
+      glowRef.current.scale.setScalar(2.2);
+      glowRef.current.material.emissiveIntensity = 1.0;
     }
     document.body.style.cursor = 'pointer';
   };
   
   const handlePointerOut = () => {
+    setIsHovered(false);
     if (starRef.current) {
       starRef.current.scale.setScalar(1);
     }
     if (glowRef.current) {
       glowRef.current.scale.setScalar(1);
-      glowRef.current.material.emissiveIntensity = 0.4;
+      glowRef.current.material.emissiveIntensity = 0.5;
     }
     document.body.style.cursor = 'default';
   };
@@ -80,56 +74,57 @@ const AnimatedStar = ({ basePosition, route, label, orbitRadius = 0.5, orbitSpee
   };
   
   return (
-    <group ref={groupRef} position={basePosition}>
-      {/* Main star mesh */}
+    <group position={basePosition}>
+      {/* Main star mesh - larger and brighter for better visibility */}
       <mesh
         ref={starRef}
         onPointerOver={handlePointerOver}
         onPointerOut={handlePointerOut}
         onClick={handleClick}
       >
-        <sphereBufferGeometry args={[0.8, 16, 16]} />
+        <sphereGeometry args={[0.6, 16, 16]} />
         <meshBasicMaterial 
           color="#ffffff"
-          emissive="#4444ff"
-          emissiveIntensity={0.6}
+          emissive="#915eff"
+          emissiveIntensity={1.2}
           transparent
-          opacity={0.9}
+          opacity={1.0}
         />
       </mesh>
       
-      {/* Glow effect mesh */}
+      {/* Outer glow effect - larger for better visibility */}
       <mesh
         ref={glowRef}
         onPointerOver={handlePointerOver}
         onPointerOut={handlePointerOut}
         onClick={handleClick}
       >
-        <sphereBufferGeometry args={[1.4, 16, 16]} />
+        <sphereGeometry args={[1.5, 16, 16]} />
         <meshBasicMaterial 
-          color="#6666ff"
-          emissive="#6666ff"
-          emissiveIntensity={0.4}
+          color="#915eff"
+          emissive="#915eff"
+          emissiveIntensity={0.7}
           transparent
-          opacity={0.3}
+          opacity={0.6}
           side={THREE.BackSide}
         />
       </mesh>
       
-      {/* Text label */}
-      <Text
-        position={[0, 2.5, 0]}
-        fontSize={0.8}
-        color="#ffffff"
-        anchorX="center"
-        anchorY="middle"
-        fontFamily="Arial, sans-serif"
-        fontWeight="bold"
-        outlineWidth={0.02}
-        outlineColor="#915eff"
-      >
-        {label}
-      </Text>
+      {/* Tooltip on hover */}
+      {isHovered && (
+        <Html
+          position={[0, 1.5, 0]}
+          center
+          style={{
+            pointerEvents: 'none',
+            userSelect: 'none'
+          }}
+        >
+          <div className="bg-black/80 backdrop-blur-sm text-white px-3 py-2 rounded-lg border border-purple-500/30 text-sm font-medium shadow-lg">
+            {label}
+          </div>
+        </Html>
+      )}
     </group>
   );
 };
@@ -175,7 +170,7 @@ const Star = ({ position, route, label }) => {
         onPointerOut={handlePointerOut}
         onClick={handleClick}
       >
-        <sphereBufferGeometry args={[0.8, 16, 16]} />
+        <sphereGeometry args={[0.8, 16, 16]} />
         <meshBasicMaterial 
           color="#ffffff"
           emissive="#4444ff"
@@ -192,7 +187,7 @@ const Star = ({ position, route, label }) => {
         onPointerOut={handlePointerOut}
         onClick={handleClick}
       >
-        <sphereBufferGeometry args={[1.4, 16, 16]} />
+        <sphereGeometry args={[1.4, 16, 16]} />
         <meshBasicMaterial 
           color="#6666ff"
           emissive="#6666ff"
@@ -232,9 +227,10 @@ const StarNavigation = () => {
     { name: 'Contact', route: '/contact' }
   ];
 
-  // Generate optimized star positions - circle around camera at z = -5
+  // Generate optimized star positions - circle around camera at z = -3
   // with sufficient separation for easy clicking and always in view frustum
-  const starPositions = generateStarPositions(routes.length, 8, -5);
+  // Closer to camera for better visibility
+  const starPositions = generateStarPositions(routes.length, 6, -3);
   
   // Combine routes with generated positions
   const starsWithPositions = routes.map((route, index) => ({
@@ -264,7 +260,7 @@ const StarNavigation = () => {
           
           {/* Background stars */}
           <mesh>
-            <sphereBufferGeometry args={[100, 64, 64]} />
+            <sphereGeometry args={[100, 64, 64]} />
             <meshBasicMaterial 
               color="#000011" 
               side={THREE.BackSide}
@@ -273,28 +269,17 @@ const StarNavigation = () => {
             />
           </mesh>
           
-          {/* Navigation stars with optimized positioning and subtle animation */}
+          {/* Fixed navigation stars with hover tooltips */}
           {starsWithPositions.map((starData) => (
-            <AnimatedStar
+            <NavigationStar
               key={starData.name}
               basePosition={starData.position}
               route={starData.route}
               label={starData.name}
-              orbitRadius={0.3}  // Subtle orbital motion radius
-              orbitSpeed={0.2}   // Slow orbital speed
             />
           ))}
           
-          {/* Post-processing effects removed to avoid dependency conflicts */}
-          
-          {/* Camera controls for development - can be removed in production */}
-          <OrbitControls 
-            enablePan={false}
-            enableZoom={false}
-            enableRotate={true}
-            autoRotate={true}
-            autoRotateSpeed={0.5}
-          />
+          {/* No camera controls - stars are fixed in position */}
         </Suspense>
       </Canvas>
     </div>

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { FaExternalLinkAlt, FaDownload, FaCalendarAlt, FaUser, FaTags, FaCertificate } from 'react-icons/fa';
+import SpaceEnvironment from '../components/SpaceEnvironment';
 import { certificates, certificateCategories, certificateStats } from '../constants/certificates';
 
 const CertificateCard = ({ certificate, index }) => {
@@ -109,10 +110,12 @@ const Certificates = () => {
   );
 
   return (
-    <div
-      className="min-h-screen py-16 px-4"
-    >
-      <div className="max-w-6xl mx-auto">
+    <div className="relative">
+      <SpaceEnvironment />
+      <div
+        className="min-h-screen py-16 px-4 relative z-10"
+      >
+        <div className="max-w-6xl mx-auto">
         {/* Header Section */}
         <div
           className="text-center mb-16"
@@ -208,6 +211,7 @@ const Certificates = () => {
             Let's Connect
             <FaExternalLinkAlt className="w-4 h-4" />
           </a>
+        </div>
         </div>
       </div>
     </div>

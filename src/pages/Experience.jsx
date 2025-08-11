@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';
 import { experiences, experienceTypes } from '../constants/experiences';
+import SpaceEnvironment from '../components/SpaceEnvironment';
 
 const ExperienceCard = ({ experience }) => {
   const type = experienceTypes[experience.type];
@@ -60,11 +61,13 @@ const Experience = () => {
     : experiences.filter(exp => exp.type === activeFilter);
 
   return (
-    <div 
-      className="relative z-0 min-h-screen py-16 px-4"
-    >
-      <div
+    <div className="relative">
+      <SpaceEnvironment />
+      <div 
+        className="relative z-10 min-h-screen py-16 px-4"
       >
+        <div
+        >
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-transparent bg-clip-text">
             My Journey
@@ -105,6 +108,7 @@ const Experience = () => {
             <ExperienceCard key={index} experience={experience} />
           ))}
         </VerticalTimeline>
+        </div>
       </div>
     </div>
   );

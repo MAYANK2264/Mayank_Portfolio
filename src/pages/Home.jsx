@@ -1,11 +1,11 @@
 import StarNavigation from '../components/StarNavigation';
-import GalaxyBackground from '../components/GalaxyBackground';
+import SpaceEnvironment from '../components/SpaceEnvironment';
 
 const Home = () => {
   return (
     <section className="relative w-full h-screen mx-auto">
       {/* Full-screen Galaxy Background Canvas */}
-      <GalaxyBackground />
+      <SpaceEnvironment />
       
       <StarNavigation />
       
