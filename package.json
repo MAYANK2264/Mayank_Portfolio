@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://MAYANK2264.github.io/MY_PORTFOLIO",
+  "homepage": "https://MAYANK2264.github.io/Mayank_Portfolio",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
