@@ -1,38 +1,74 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import emailjs from '@emailjs/browser';
 import SpaceEnvironment from '../components/SpaceEnvironment';
+import { getEmailjsConfig } from '../config/emailjs';
 
 const Contact = () => {
   const formRef = useRef();
   const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState('');
   const [form, setForm] = useState({
     name: '',
     email: '',
     message: '',
   });
 
+  // Initialize EmailJS
+  useEffect(() => {
+    const config = getEmailjsConfig();
+    if (config.publicKey && config.publicKey !== 'your_public_key_here') {
+      emailjs.init(config.publicKey);
+      console.log('EmailJS initialized successfully');
+    } else {
+      console.warn('EmailJS not configured. Please update your credentials in src/config/emailjs.js');
+    }
+  }, []);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
+    if (status) setStatus(''); // Clear status when user starts typing
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setStatus('');
+
+    // Get EmailJS configuration
+    const config = getEmailjsConfig();
+    const { serviceId, templateId, publicKey } = config;
+
+    if (!serviceId || !templateId || !publicKey || 
+        serviceId === 'service_your_service_id' || 
+        templateId === 'template_your_template_id' ||
+        publicKey === 'your_public_key_here') {
+      setStatus('error');
+      alert('EmailJS is not properly configured. Please update your credentials in src/config/emailjs.js');
+      setLoading(false);
+      return;
+    }
 
     try {
-      await emailjs.send(
-        import.meta.env.VITE_EMAILJS_SERVICE_ID || 'service_default',
-        import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'template_default',
-        {
-          from_name: form.name,
-          to_name: 'Mayank Chouhan',
-          from_email: form.email,
-          to_email: 'kmmayank08@gmail.com',
-          message: form.message,
-        },
-        import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'public_key_default'
+      const templateParams = {
+        from_name: form.name,
+        to_name: 'Mayank Chouhan',
+        from_email: form.email,
+        to_email: 'kmmayank08@gmail.com',
+        message: form.message,
+        reply_to: form.email,
+      };
+
+      console.log('Sending email with params:', templateParams);
+      
+      const response = await emailjs.send(
+        serviceId,
+        templateId,
+        templateParams,
+        publicKey
       );
+
+      console.log('Email sent successfully:', response);
 
       setForm({
         name: '',
@@ -40,10 +76,18 @@ const Contact = () => {
         message: '',
       });
 
-      alert('Thank you for your message. I will get back to you soon!');
+      setStatus('success');
+      alert('Thank you for your message! I will get back to you soon.');
     } catch (error) {
-      console.error(error);
-      alert('Something went wrong. Please try again.');
+      console.error('EmailJS error:', error);
+      setStatus('error');
+      
+      let errorMessage = 'Something went wrong. Please try again.';
+      if (error.text) {
+        errorMessage += ` Error: ${error.text}`;
+      }
+      
+      alert(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -137,7 +181,7 @@ const Contact = () => {
               <h3 className="text-xl font-semibold mb-4 text-white">Other Ways to Connect</h3>
               <div className="flex justify-center space-x-8">
                 <a
-                  href="https://github.com/yourusername"
+                  href="https://github.com/MAYANK2264"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-gray-300 hover:text-purple-400 transition-colors text-lg"
@@ -145,7 +189,7 @@ const Contact = () => {
                   GitHub
                 </a>
                 <a
-                  href="https://linkedin.com/in/yourusername"
+                  href="https://linkedin.com/in/mayank-chouhan-a92466251"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-gray-300 hover:text-purple-400 transition-colors text-lg"
