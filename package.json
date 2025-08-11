@@ -17,7 +17,6 @@
     "@react-three/drei": "^9.122.0",
     "@react-three/fiber": "^8.18.0",
     "@tsparticles/react": "^3.0.0",
-    "framer-motion": "^11.18.2",
     "maath": "^0.10.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

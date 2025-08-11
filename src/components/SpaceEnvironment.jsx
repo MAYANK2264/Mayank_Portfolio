@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useMemo } from 'react';
 import * as THREE from 'three';
 
 const SpaceEnvironment = () => {
@@ -8,10 +8,24 @@ const SpaceEnvironment = () => {
   const rendererRef = useRef();
   const galaxyRef = useRef();
   const galacticCenterRef = useRef();
-  const animationFrameRef = useRef();
+  const animationFrameRef = useRef(); // Store animation frame id in ref
   const mouseRef = useRef({ x: 0, y: 0 });
   const targetRotationRef = useRef({ x: 0, y: 0 });
   const currentRotationRef = useRef({ x: 0, y: 0 });
+  const lastFrameTimeRef = useRef(0); // For frame rate limiting
+
+  // Memoized galaxy parameters to avoid recreating arrays
+  const galaxyParameters = useMemo(() => ({
+    count: 100000,
+    size: 0.01,
+    radius: 50,
+    branches: 5,
+    spin: 1,
+    randomness: 0.5,
+    randomnessPower: 3,
+    insideColor: '#ff6030',
+    outsideColor: '#1b3984'
+  }), []);
 
   useEffect(() => {
     // Scene setup with fog for depth
@@ -36,72 +50,14 @@ const SpaceEnvironment = () => {
     rendererRef.current.toneMappingExposure = 0.5;
     containerRef.current.appendChild(rendererRef.current.domElement);
 
-    // Create galactic center
+    // Create galactic center - removed the purple center object
     const createGalacticCenter = () => {
-      const centerGroup = new THREE.Group();
-
-      // Core sphere - reduced size and opacity
-      const coreGeometry = new THREE.SphereGeometry(0.5, 32, 32);
-      const coreMaterial = new THREE.MeshBasicMaterial({
-        color: 0x915eff,
-        transparent: true,
-        opacity: 0.3
-      });
-      const core = new THREE.Mesh(coreGeometry, coreMaterial);
-      centerGroup.add(core);
-
-      // Outer glow - more subtle
-      const glowGeometry = new THREE.SphereGeometry(1, 32, 32);
-      const glowMaterial = new THREE.ShaderMaterial({
-        uniforms: {
-          time: { value: 0 },
-          color: { value: new THREE.Color(0x915eff) }
-        },
-        vertexShader: `
-          varying vec3 vNormal;
-          void main() {
-            vNormal = normalize(normalMatrix * normal);
-            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-          }
-        `,
-        fragmentShader: `
-          uniform vec3 color;
-          uniform float time;
-          varying vec3 vNormal;
-          void main() {
-            float intensity = pow(0.3 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 2.0);
-            intensity = intensity * (1.0 + 0.1 * sin(time * 2.0));
-            gl_FragColor = vec4(color, intensity * 0.3);
-          }
-        `,
-        transparent: true,
-        side: THREE.BackSide,
-        blending: THREE.AdditiveBlending
-      });
-      const glow = new THREE.Mesh(glowGeometry, glowMaterial);
-      centerGroup.add(glow);
-
-      // Point light - reduced intensity
-      const light = new THREE.PointLight(0x915eff, 0.5, 20);
-      centerGroup.add(light);
-
-      galacticCenterRef.current = centerGroup;
-      sceneRef.current.add(centerGroup);
+      // Removed the galactic center for a cleaner look
     };
 
     // Create galaxy
     const createGalaxy = () => {
-      const parameters = {
-        count: 100000,
-        size: 0.01,
-        radius: 50,
-        branches: 5,
-        spin: 1,
-        randomness: 0.5,
-        randomnessPower: 3,
-        insideColor: '#ff6030',
-        outsideColor: '#1b3984'
-      };
+      const parameters = galaxyParameters;
 
       const geometry = new THREE.BufferGeometry();
       const positions = new Float32Array(parameters.count * 3);
@@ -217,9 +173,15 @@ const SpaceEnvironment = () => {
 
     window.addEventListener('mousemove', onMouseMove);
 
-    // Animation
-    const animate = () => {
+    // Animation with performance safeguards
+    const animate = (currentTime) => {
       animationFrameRef.current = requestAnimationFrame(animate);
+
+      // Limit to ~60 FPS maximum (16.67ms per frame)
+      if (currentTime - lastFrameTimeRef.current < 16.67) {
+        return;
+      }
+      lastFrameTimeRef.current = currentTime;
 
       // Smooth rotation interpolation
       currentRotationRef.current.x += (targetRotationRef.current.x - currentRotationRef.current.x) * 0.05;
@@ -230,16 +192,7 @@ const SpaceEnvironment = () => {
         galaxyRef.current.rotation.y += 0.0002 + currentRotationRef.current.y * 0.01;
       }
 
-      if (galacticCenterRef.current) {
-        galacticCenterRef.current.rotation.x = currentRotationRef.current.x * 0.5;
-        galacticCenterRef.current.rotation.y += 0.001 + currentRotationRef.current.y * 0.005;
-        
-        // Update glow effect
-        const glowMesh = galacticCenterRef.current.children[1];
-        if (glowMesh.material.uniforms) {
-          glowMesh.material.uniforms.time.value = performance.now() * 0.001;
-        }
-      }
+      // Removed galactic center animations
 
       // Smooth camera movement
       const time = Date.now() * 0.0001;
@@ -254,8 +207,10 @@ const SpaceEnvironment = () => {
 
     animate();
 
-    // Handle resize
+    // Handle resize - update camera aspect and renderer size
     const handleResize = () => {
+      if (!cameraRef.current || !rendererRef.current) return;
+      
       cameraRef.current.aspect = window.innerWidth / window.innerHeight;
       cameraRef.current.updateProjectionMatrix();
       rendererRef.current.setSize(window.innerWidth, window.innerHeight);
@@ -264,13 +219,27 @@ const SpaceEnvironment = () => {
 
     window.addEventListener('resize', handleResize);
 
+    // Cleanup function - cancel animation frame in useEffect cleanup
     return () => {
       window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('resize', handleResize);
-      cancelAnimationFrame(animationFrameRef.current);
-      containerRef.current?.removeChild(rendererRef.current.domElement);
+      
+      // Cancel animation frame in useEffect cleanup
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+      
+      // Clean up DOM elements
+      if (containerRef.current && rendererRef.current?.domElement) {
+        containerRef.current.removeChild(rendererRef.current.domElement);
+      }
+      
+      // Dispose of Three.js resources
+      if (rendererRef.current) {
+        rendererRef.current.dispose();
+      }
     };
-  }, []);
+  }, [galaxyParameters]); // Include galaxyParameters in dependency array
 
   return <div ref={containerRef} className="fixed inset-0 -z-10" />;
 };

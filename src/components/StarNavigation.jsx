@@ -1,430 +1,303 @@
-import { useRef, useEffect, useState } from 'react';
+import { Suspense, useRef, useState, useEffect } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { 
+  Text, 
+  OrbitControls 
+} from '@react-three/drei';
 import { useNavigate } from 'react-router-dom';
 import * as THREE from 'three';
 
-const StarNavigation = () => {
-  const containerRef = useRef();
-  const sceneRef = useRef();
-  const cameraRef = useRef();
-  const rendererRef = useRef();
-  const shipRef = useRef();
-  const targetPositionRef = useRef(null);
-  const isAnimatingRef = useRef(false);
-  const hyperspaceRef = useRef();
-  const [activeLabel, setActiveLabel] = useState('');
-  const navigate = useNavigate();
+/**
+ * Utility function to generate evenly spaced positions in a circle around camera
+ * This ensures optimal usability by:
+ * - Placing stars at consistent z = -5 distance (always in view frustum)
+ * - Even angular distribution for easy clicking
+ * - Sufficient separation to prevent accidental clicks
+ * - Maintaining visual balance in the scene
+ */
+const generateStarPositions = (starCount, radius = 10, z = -5) => {
+  const positions = [];
+  const angleStep = (2 * Math.PI) / starCount;
+  
+  for (let i = 0; i < starCount; i++) {
+    const angle = i * angleStep;
+    const x = Math.cos(angle) * radius;
+    const y = Math.sin(angle) * radius;
+    positions.push([x, y, z]);
+  }
+  
+  return positions;
+};
 
-  const navigationStars = [
-    { name: 'Skills', position: new THREE.Vector3(-30, 20, -20), route: '/skills' },
-    { name: 'Experience', position: new THREE.Vector3(30, 20, -20), route: '/experience' },
-    { name: 'Projects', position: new THREE.Vector3(-20, -20, -20), route: '/projects' },
-    { name: 'Contact', position: new THREE.Vector3(20, -20, -20), route: '/contact' }
+// AnimatedStar component with subtle orbital animation
+const AnimatedStar = ({ basePosition, route, label, orbitRadius = 0.5, orbitSpeed = 0.3 }) => {
+  const navigate = useNavigate();
+  const starRef = useRef();
+  const glowRef = useRef();
+  const groupRef = useRef();
+  
+  // Add subtle orbital animation using useFrame
+  useFrame((state) => {
+    if (groupRef.current) {
+      const time = state.clock.elapsedTime;
+      // Subtle orbital motion around the base position
+      const offsetX = Math.cos(time * orbitSpeed) * orbitRadius;
+      const offsetY = Math.sin(time * orbitSpeed * 0.7) * orbitRadius * 0.5; // Different frequency for Y
+      const offsetZ = Math.sin(time * orbitSpeed * 0.5) * orbitRadius * 0.3; // Even subtler Z motion
+      
+      groupRef.current.position.set(
+        basePosition[0] + offsetX,
+        basePosition[1] + offsetY,
+        basePosition[2] + offsetZ
+      );
+    }
+  });
+  
+  const handlePointerOver = () => {
+    if (starRef.current) {
+      starRef.current.scale.setScalar(1.5);
+    }
+    if (glowRef.current) {
+      glowRef.current.scale.setScalar(1.8);
+      glowRef.current.material.emissiveIntensity = 0.8;
+    }
+    document.body.style.cursor = 'pointer';
+  };
+  
+  const handlePointerOut = () => {
+    if (starRef.current) {
+      starRef.current.scale.setScalar(1);
+    }
+    if (glowRef.current) {
+      glowRef.current.scale.setScalar(1);
+      glowRef.current.material.emissiveIntensity = 0.4;
+    }
+    document.body.style.cursor = 'default';
+  };
+  
+  const handleClick = () => {
+    navigate(route);
+  };
+  
+  return (
+    <group ref={groupRef} position={basePosition}>
+      {/* Main star mesh */}
+      <mesh
+        ref={starRef}
+        onPointerOver={handlePointerOver}
+        onPointerOut={handlePointerOut}
+        onClick={handleClick}
+      >
+        <sphereBufferGeometry args={[0.8, 16, 16]} />
+        <meshBasicMaterial 
+          color="#ffffff"
+          emissive="#4444ff"
+          emissiveIntensity={0.6}
+          transparent
+          opacity={0.9}
+        />
+      </mesh>
+      
+      {/* Glow effect mesh */}
+      <mesh
+        ref={glowRef}
+        onPointerOver={handlePointerOver}
+        onPointerOut={handlePointerOut}
+        onClick={handleClick}
+      >
+        <sphereBufferGeometry args={[1.4, 16, 16]} />
+        <meshBasicMaterial 
+          color="#6666ff"
+          emissive="#6666ff"
+          emissiveIntensity={0.4}
+          transparent
+          opacity={0.3}
+          side={THREE.BackSide}
+        />
+      </mesh>
+      
+      {/* Text label */}
+      <Text
+        position={[0, 2.5, 0]}
+        fontSize={0.8}
+        color="#ffffff"
+        anchorX="center"
+        anchorY="middle"
+        fontFamily="Arial, sans-serif"
+        fontWeight="bold"
+        outlineWidth={0.02}
+        outlineColor="#915eff"
+      >
+        {label}
+      </Text>
+    </group>
+  );
+};
+
+// Individual Star component (kept for backward compatibility)
+const Star = ({ position, route, label }) => {
+  const navigate = useNavigate();
+  const starRef = useRef();
+  const glowRef = useRef();
+  
+  const handlePointerOver = () => {
+    if (starRef.current) {
+      starRef.current.scale.setScalar(1.5);
+    }
+    if (glowRef.current) {
+      glowRef.current.scale.setScalar(1.8);
+      glowRef.current.material.emissiveIntensity = 0.8;
+    }
+    document.body.style.cursor = 'pointer';
+  };
+  
+  const handlePointerOut = () => {
+    if (starRef.current) {
+      starRef.current.scale.setScalar(1);
+    }
+    if (glowRef.current) {
+      glowRef.current.scale.setScalar(1);
+      glowRef.current.material.emissiveIntensity = 0.4;
+    }
+    document.body.style.cursor = 'default';
+  };
+  
+  const handleClick = () => {
+    navigate(route);
+  };
+  
+  return (
+    <group position={position}>
+      {/* Main star mesh */}
+      <mesh
+        ref={starRef}
+        onPointerOver={handlePointerOver}
+        onPointerOut={handlePointerOut}
+        onClick={handleClick}
+      >
+        <sphereBufferGeometry args={[0.8, 16, 16]} />
+        <meshBasicMaterial 
+          color="#ffffff"
+          emissive="#4444ff"
+          emissiveIntensity={0.6}
+          transparent
+          opacity={0.9}
+        />
+      </mesh>
+      
+      {/* Glow effect mesh */}
+      <mesh
+        ref={glowRef}
+        onPointerOver={handlePointerOver}
+        onPointerOut={handlePointerOut}
+        onClick={handleClick}
+      >
+        <sphereBufferGeometry args={[1.4, 16, 16]} />
+        <meshBasicMaterial 
+          color="#6666ff"
+          emissive="#6666ff"
+          emissiveIntensity={0.4}
+          transparent
+          opacity={0.3}
+          side={THREE.BackSide}
+        />
+      </mesh>
+      
+      {/* Text label */}
+      <Text
+        position={[0, 2.5, 0]}
+        fontSize={0.8}
+        color="#ffffff"
+        anchorX="center"
+        anchorY="middle"
+        fontFamily="Arial, sans-serif"
+        fontWeight="bold"
+        outlineWidth={0.02}
+        outlineColor="#915eff"
+      >
+        {label}
+      </Text>
+    </group>
+  );
+};
+
+// Main StarNavigation component
+const StarNavigation = () => {
+  const routes = [
+    { name: 'About', route: '/about' },
+    { name: 'Skills', route: '/skills' },
+    { name: 'Experience', route: '/experience' },
+    { name: 'Projects', route: '/projects' },
+    { name: 'Certificates', route: '/certificates' },
+    { name: 'Contact', route: '/contact' }
   ];
 
-  useEffect(() => {
-    // Scene setup
-    sceneRef.current = new THREE.Scene();
-    cameraRef.current = new THREE.PerspectiveCamera(
-      60,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      2000
-    );
-    
-    rendererRef.current = new THREE.WebGLRenderer({
-      antialias: true,
-      alpha: true
-    });
-    rendererRef.current.setSize(window.innerWidth, window.innerHeight);
-    rendererRef.current.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    containerRef.current.appendChild(rendererRef.current.domElement);
-
-    // Create hyperspace effect
-    const createHyperspace = () => {
-      const starCount = 1000;
-      const geometry = new THREE.BufferGeometry();
-      const positions = new Float32Array(starCount * 3);
-      const velocities = new Float32Array(starCount);
-      const sizes = new Float32Array(starCount);
-
-      for(let i = 0; i < starCount; i++) {
-        const radius = Math.random() * 100 + 50;
-        const theta = Math.random() * Math.PI * 2;
-        const phi = Math.acos(Math.random() * 2 - 1);
-
-        positions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
-        positions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
-        positions[i * 3 + 2] = radius * Math.cos(phi);
-
-        velocities[i] = Math.random() * 0.5 + 0.5;
-        sizes[i] = Math.random() * 2 + 1;
-      }
-
-      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-      geometry.setAttribute('velocity', new THREE.BufferAttribute(velocities, 1));
-      geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
-
-      const material = new THREE.ShaderMaterial({
-        uniforms: {
-          time: { value: 0 },
-          hyperspace: { value: 0.0 }
-        },
-        vertexShader: `
-          attribute float velocity;
-          attribute float size;
-          uniform float time;
-          uniform float hyperspace;
-          varying float vAlpha;
-          
-          void main() {
-            vec3 pos = position;
-            float speed = velocity * hyperspace * 2.0;
-            float distance = length(pos);
-            
-            // Calculate streaking effect
-            pos = normalize(pos) * (distance + time * 50.0 * speed);
-            
-            vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
-            gl_Position = projectionMatrix * mvPosition;
-            
-            // Size increases as stars come closer
-            float sizeFactor = 1.0 + hyperspace * 2.0;
-            gl_PointSize = size * sizeFactor * (300.0 / -mvPosition.z);
-            
-            // Fade based on speed and distance
-            vAlpha = smoothstep(0.0, 1.0, hyperspace) * (1.0 - length(pos) / 2000.0);
-          }
-        `,
-        fragmentShader: `
-          varying float vAlpha;
-          
-          void main() {
-            vec2 coord = gl_PointCoord - vec2(0.5);
-            float dist = length(coord);
-            float alpha = smoothstep(0.5, 0.0, dist) * vAlpha;
-            gl_FragColor = vec4(1.0, 1.0, 1.0, alpha);
-          }
-        `,
-        transparent: true,
-        depthWrite: false,
-        blending: THREE.AdditiveBlending
-      });
-
-      hyperspaceRef.current = new THREE.Points(geometry, material);
-      sceneRef.current.add(hyperspaceRef.current);
-    };
-
-    // Create stars
-    navigationStars.forEach(star => {
-      const starGroup = new THREE.Group();
-
-      // Create star glow using particles
-      const particleCount = 300;
-      const geometry = new THREE.BufferGeometry();
-      const positions = new Float32Array(particleCount * 3);
-      const colors = new Float32Array(particleCount * 3);
-      const sizes = new Float32Array(particleCount);
-
-      const baseColor = new THREE.Color(0x915eff);
-      const radius = 4;
-
-      for (let i = 0; i < particleCount; i++) {
-        // Create a spherical distribution
-        const theta = Math.random() * Math.PI * 2;
-        const phi = Math.acos(Math.random() * 2 - 1);
-        const r = Math.random() * radius;
-
-        positions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
-        positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
-        positions[i * 3 + 2] = r * Math.cos(phi);
-
-        // Color with slight variation
-        const colorVariation = 0.2;
-        colors[i * 3] = baseColor.r + (Math.random() - 0.5) * colorVariation;
-        colors[i * 3 + 1] = baseColor.g + (Math.random() - 0.5) * colorVariation;
-        colors[i * 3 + 2] = baseColor.b + (Math.random() - 0.5) * colorVariation;
-
-        sizes[i] = Math.random() * 0.4 + 0.2;
-      }
-
-      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-      geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-      geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
-
-      const material = new THREE.ShaderMaterial({
-        uniforms: {
-          time: { value: 0 },
-          pointTexture: { value: new THREE.TextureLoader().load('/star.png') }
-        },
-        vertexShader: `
-          attribute float size;
-          varying vec3 vColor;
-          uniform float time;
-          void main() {
-            vColor = color;
-            vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-            float pulse = 1.0 + 0.1 * sin(time * 2.0 + length(position) * 3.0);
-            gl_PointSize = size * pulse * (300.0 / -mvPosition.z);
-            gl_Position = projectionMatrix * mvPosition;
-          }
-        `,
-        fragmentShader: `
-          uniform sampler2D pointTexture;
-          varying vec3 vColor;
-          void main() {
-            vec4 texColor = texture2D(pointTexture, gl_PointCoord);
-            gl_FragColor = vec4(vColor, texColor.a);
-          }
-        `,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false,
-        transparent: true,
-        vertexColors: true
-      });
-
-      const particles = new THREE.Points(geometry, material);
-      starGroup.add(particles);
-
-      // Add text label
-      const canvas = document.createElement('canvas');
-      const context = canvas.getContext('2d');
-      canvas.width = 256;
-      canvas.height = 128;
-      context.fillStyle = '#915eff';
-      context.font = 'bold 60px Arial';
-      context.textAlign = 'center';
-      context.textBaseline = 'middle';
-      context.fillText(star.name, 128, 64);
-
-      const texture = new THREE.CanvasTexture(canvas);
-      const spriteMaterial = new THREE.SpriteMaterial({
-        map: texture,
-        transparent: true,
-        opacity: 0.8
-      });
-      const sprite = new THREE.Sprite(spriteMaterial);
-      sprite.scale.set(10, 5, 1);
-      sprite.position.y = radius * 2;
-      starGroup.add(sprite);
-
-      // Add a core light
-      const coreLight = new THREE.PointLight(0x915eff, 2, 15);
-      coreLight.position.set(0, 0, 0);
-      starGroup.add(coreLight);
-
-      // Add a pulsing core
-      const coreGeometry = new THREE.SphereGeometry(1, 32, 32);
-      const coreMaterial = new THREE.MeshBasicMaterial({
-        color: 0x915eff,
-        transparent: true,
-        opacity: 0.8
-      });
-      const core = new THREE.Mesh(coreGeometry, coreMaterial);
-      starGroup.add(core);
-
-      starGroup.position.copy(star.position);
-      starGroup.userData = { name: star.name, route: star.route };
-      sceneRef.current.add(starGroup);
-    });
-
-    createHyperspace();
-
-    // Create spaceship
-    const shipGroup = new THREE.Group();
-    
-    // Ship body
-    const bodyGeometry = new THREE.ConeGeometry(0.5, 2, 8);
-    const bodyMaterial = new THREE.MeshBasicMaterial({
-      color: 0x915eff,
-      wireframe: true,
-      transparent: true,
-      opacity: 0.8
-    });
-    const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
-    body.rotation.x = Math.PI / 2;
-    shipGroup.add(body);
-
-    // Ship wings
-    const wingGeometry = new THREE.BufferGeometry();
-    const wingVertices = new Float32Array([
-      -0.5, 0.0, -0.5,
-      0.0, 0.0, 0.0,
-      0.0, 0.0, -1.0,
-      
-      0.5, 0.0, -0.5,
-      0.0, 0.0, 0.0,
-      0.0, 0.0, -1.0
-    ]);
-    wingGeometry.setAttribute('position', new THREE.BufferAttribute(wingVertices, 3));
-    const wingMaterial = new THREE.MeshBasicMaterial({
-      color: 0x915eff,
-      wireframe: true,
-      transparent: true,
-      opacity: 0.6
-    });
-    const wings = new THREE.Mesh(wingGeometry, wingMaterial);
-    shipGroup.add(wings);
-
-    // Engine glow
-    const engineGlow = new THREE.PointLight(0xff3366, 1, 5);
-    engineGlow.position.z = -1;
-    shipGroup.add(engineGlow);
-
-    shipRef.current = shipGroup;
-    shipRef.current.position.set(0, 0, 10);
-    sceneRef.current.add(shipRef.current);
-
-    // Camera position
-    cameraRef.current.position.z = 50;
-
-    // Mouse interaction
-    const raycaster = new THREE.Raycaster();
-    const mouse = new THREE.Vector2();
-
-    const onMouseMove = (event) => {
-      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-      raycaster.setFromCamera(mouse, cameraRef.current);
-      const intersects = raycaster.intersectObjects(sceneRef.current.children, true);
-
-      let foundStar = false;
-      for (const intersect of intersects) {
-        const parent = intersect.object.parent;
-        if (parent && parent.userData.name) {
-          setActiveLabel(parent.userData.name);
-          parent.scale.lerp(new THREE.Vector3(1.2, 1.2, 1.2), 0.1);
-          foundStar = true;
-          break;
-        }
-      }
-      if (!foundStar) {
-        sceneRef.current.children.forEach(child => {
-          if (child.userData.name) {
-            child.scale.lerp(new THREE.Vector3(1, 1, 1), 0.1);
-          }
-        });
-        setActiveLabel('');
-      }
-    };
-
-    const onClick = (event) => {
-      if (isAnimatingRef.current) return;
-
-      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-      raycaster.setFromCamera(mouse, cameraRef.current);
-      const intersects = raycaster.intersectObjects(sceneRef.current.children, true);
-
-      for (const intersect of intersects) {
-        const parent = intersect.object.parent;
-        if (parent && parent.userData.name) {
-          targetPositionRef.current = parent.position.clone();
-          isAnimatingRef.current = true;
-          
-          // Start hyperspace effect
-          const startTime = performance.now();
-          const animationDuration = 2000; // 2 seconds
-
-          const animateHyperspace = () => {
-            const currentTime = performance.now();
-            const elapsed = currentTime - startTime;
-            const progress = Math.min(elapsed / animationDuration, 1);
-
-            // Update hyperspace effect
-            if (hyperspaceRef.current?.material.uniforms) {
-              hyperspaceRef.current.material.uniforms.hyperspace.value = progress;
-            }
-
-            // Zoom camera
-            const startZ = 50;
-            const endZ = 5;
-            cameraRef.current.position.z = startZ + (endZ - startZ) * progress;
-
-            // Continue animation
-            if (progress < 1) {
-              requestAnimationFrame(animateHyperspace);
-            } else {
-              // Navigate after hyperspace effect
-              navigate(parent.userData.route);
-            }
-          };
-
-          animateHyperspace();
-          break;
-        }
-      }
-    };
-
-    window.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('click', onClick);
-
-    // Animation
-    const animate = () => {
-      const animationId = requestAnimationFrame(animate);
-
-      // Update star animations
-      sceneRef.current.children.forEach(child => {
-        if (child.userData.name) {
-          const time = performance.now() * 0.001;
-          child.children.forEach(subChild => {
-            if (subChild instanceof THREE.Points && subChild.material.uniforms) {
-              subChild.material.uniforms.time.value = time;
-              subChild.rotation.y = time * 0.1;
-            }
-          });
-
-          // Pulse the core
-          const core = child.children.find(c => c instanceof THREE.Mesh);
-          if (core) {
-            const scale = 1 + Math.sin(time * 2) * 0.2;
-            core.scale.setScalar(scale);
-          }
-
-          // Pulse the text opacity
-          const sprite = child.children.find(c => c instanceof THREE.Sprite);
-          if (sprite) {
-            sprite.material.opacity = 0.6 + Math.sin(time * 2) * 0.2;
-          }
-        }
-      });
-
-      // Update hyperspace effect
-      if (hyperspaceRef.current?.material.uniforms) {
-        hyperspaceRef.current.material.uniforms.time.value = performance.now() * 0.001;
-      }
-
-      rendererRef.current.render(sceneRef.current, cameraRef.current);
-    };
-
-    animate();
-
-    // Cleanup
-    return () => {
-      window.removeEventListener('mousemove', onMouseMove);
-      window.removeEventListener('click', onClick);
-      containerRef.current?.removeChild(rendererRef.current.domElement);
-    };
-  }, [navigate]);
+  // Generate optimized star positions - circle around camera at z = -5
+  // with sufficient separation for easy clicking and always in view frustum
+  const starPositions = generateStarPositions(routes.length, 8, -5);
+  
+  // Combine routes with generated positions
+  const starsWithPositions = routes.map((route, index) => ({
+    ...route,
+    position: starPositions[index]
+  }));
 
   return (
-    <>
-      <div ref={containerRef} className="fixed inset-0 -z-10" />
-      {activeLabel && (
-        <div 
-          className="fixed text-white text-2xl font-bold pointer-events-none"
-          style={{
-            left: '50%',
-            bottom: '10%',
-            transform: 'translateX(-50%)',
-            textShadow: '0 0 10px #915eff'
-          }}
-        >
-          {activeLabel}
-        </div>
-      )}
-    </>
+    <div className="fixed inset-0 -z-10">
+      <Canvas
+        camera={{ 
+          position: [0, 0, 15], 
+          fov: 60,
+          near: 0.1,
+          far: 1000
+        }}
+        gl={{
+          antialias: true,
+          alpha: true,
+          powerPreference: "high-performance"
+        }}
+      >
+        <Suspense fallback={null}>
+          {/* Lighting */}
+          <ambientLight intensity={0.3} />
+          <pointLight position={[10, 10, 10]} intensity={0.8} />
+          
+          {/* Background stars */}
+          <mesh>
+            <sphereBufferGeometry args={[100, 64, 64]} />
+            <meshBasicMaterial 
+              color="#000011" 
+              side={THREE.BackSide}
+              transparent
+              opacity={0.8}
+            />
+          </mesh>
+          
+          {/* Navigation stars with optimized positioning and subtle animation */}
+          {starsWithPositions.map((starData) => (
+            <AnimatedStar
+              key={starData.name}
+              basePosition={starData.position}
+              route={starData.route}
+              label={starData.name}
+              orbitRadius={0.3}  // Subtle orbital motion radius
+              orbitSpeed={0.2}   // Slow orbital speed
+            />
+          ))}
+          
+          {/* Post-processing effects removed to avoid dependency conflicts */}
+          
+          {/* Camera controls for development - can be removed in production */}
+          <OrbitControls 
+            enablePan={false}
+            enableZoom={false}
+            enableRotate={true}
+            autoRotate={true}
+            autoRotateSpeed={0.5}
+          />
+        </Suspense>
+      </Canvas>
+    </div>
   );
 };
 

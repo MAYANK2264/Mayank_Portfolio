@@ -1,30 +1,8 @@
-import { motion } from 'framer-motion';
 import { skillCategories } from '../constants/skills';
 import { BiBrain } from 'react-icons/bi';
 import { FaTools } from 'react-icons/fa';
 import { AiOutlineCode } from 'react-icons/ai';
 
-const container = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1
-    }
-  }
-};
-
-const item = {
-  hidden: { y: 20, opacity: 0 },
-  visible: {
-    y: 0,
-    opacity: 1,
-    transition: {
-      duration: 0.5,
-      ease: "easeOut"
-    }
-  }
-};
 
 const CategoryIcon = ({ category }) => {
   switch (category) {
@@ -41,12 +19,10 @@ const CategoryIcon = ({ category }) => {
 
 const ProgressBar = ({ level, color }) => (
   <div className="h-2 w-full bg-gray-700/50 rounded-full overflow-hidden">
-    <motion.div
-      initial={{ width: 0 }}
-      animate={{ width: `${level}%` }}
-      transition={{ duration: 1, ease: "easeOut" }}
-      className="h-full rounded-full"
+    <div
+      className="h-full rounded-full transition-all duration-1000 ease-out"
       style={{ 
+        width: `${level}%`,
         backgroundColor: color || '#6366f1',
         boxShadow: `0 0 10px ${color || '#6366f1'}40`
       }}
@@ -58,8 +34,7 @@ const SkillCard = ({ skill, isToolCard = false }) => {
   const Icon = skill.icon;
   
   return (
-    <motion.div
-      variants={item}
+    <div
       className="bg-[rgb(var(--color-bg-alt))] rounded-xl p-4 border-2 border-indigo-500/20 hover:border-indigo-500/40 transition-all"
     >
       <div className="flex items-start gap-4">
@@ -86,13 +61,12 @@ const SkillCard = ({ skill, isToolCard = false }) => {
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
 const SoftSkillCard = ({ skill }) => (
-  <motion.div
-    variants={item}
+  <div
     className="bg-[rgb(var(--color-bg-alt))] rounded-xl p-4 border-2 border-purple-500/20 hover:border-purple-500/40 transition-all"
   >
     <div className="space-y-3">
@@ -111,12 +85,11 @@ const SoftSkillCard = ({ skill }) => (
         <ProgressBar level={skill.level} color="#A855F7" />
       </div>
     </div>
-  </motion.div>
+  </div>
 );
 
 const SkillCategory = ({ category, index }) => (
-  <motion.div
-    variants={item}
+  <div
     className="mb-16 last:mb-0"
   >
     <div className="flex items-center gap-3 mb-6">
@@ -141,21 +114,19 @@ const SkillCategory = ({ category, index }) => (
         )
       ))}
     </div>
-  </motion.div>
+  </div>
 );
 
 const Skills = () => {
   return (
-    <div className="min-h-screen py-16 px-4">
-      <motion.div
-        variants={container}
-        initial="hidden"
-        animate="visible"
+    <div
+      className="min-h-screen py-16 px-4"
+    >
+      <div
         className="max-w-7xl mx-auto"
       >
         {/* Header */}
-        <motion.div
-          variants={item}
+        <div
           className="text-center mb-16"
         >
           <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-transparent bg-clip-text">
@@ -164,13 +135,13 @@ const Skills = () => {
           <p className="text-xl text-secondary max-w-3xl mx-auto">
             A comprehensive overview of my technical abilities, soft skills, and proficiency with various tools
           </p>
-        </motion.div>
+        </div>
 
         {/* Skill Categories */}
         {skillCategories.map((category, index) => (
           <SkillCategory key={index} category={category} index={index} />
         ))}
-      </motion.div>
+      </div>
     </div>
   );
 };

@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';
-import { motion } from 'framer-motion';
 import { experiences, experienceTypes } from '../constants/experiences';
 
 const ExperienceCard = ({ experience }) => {
@@ -61,11 +60,10 @@ const Experience = () => {
     : experiences.filter(exp => exp.type === activeFilter);
 
   return (
-    <div className="relative z-0 min-h-screen py-16 px-4">
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
+    <div 
+      className="relative z-0 min-h-screen py-16 px-4"
+    >
+      <div
       >
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-transparent bg-clip-text">
@@ -107,7 +105,7 @@ const Experience = () => {
             <ExperienceCard key={index} experience={experience} />
           ))}
         </VerticalTimeline>
-      </motion.div>
+      </div>
     </div>
   );
 };

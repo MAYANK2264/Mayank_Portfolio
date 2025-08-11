@@ -1,5 +1,4 @@
 import { useState, useRef } from 'react';
-import { motion } from 'framer-motion';
 import emailjs from '@emailjs/browser';
 
 const Contact = () => {
@@ -22,16 +21,16 @@ const Contact = () => {
 
     try {
       await emailjs.send(
-        'YOUR_SERVICE_ID', // Replace with your EmailJS service ID
-        'YOUR_TEMPLATE_ID', // Replace with your EmailJS template ID
+        import.meta.env.VITE_EMAILJS_SERVICE_ID || 'service_default',
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'template_default',
         {
           from_name: form.name,
-          to_name: 'Your Name',
+          to_name: 'Mayank Chouhan',
           from_email: form.email,
-          to_email: 'your.email@example.com',
+          to_email: 'kmmayank08@gmail.com',
           message: form.message,
         },
-        'YOUR_PUBLIC_KEY' // Replace with your EmailJS public key
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'public_key_default'
       );
 
       setForm({
@@ -50,10 +49,7 @@ const Contact = () => {
   };
 
   return (
-    <motion.section
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
+    <section
       className="py-20"
     >
       <div className="container mx-auto px-4">
@@ -163,7 +159,7 @@ const Contact = () => {
           </div>
         </div>
       </div>
-    </motion.section>
+    </section>
   );
 };
 

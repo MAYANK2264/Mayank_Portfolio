@@ -17,5 +17,9 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
+    'react/prop-types': 'off', // Disable prop-types validation
+    'no-unused-vars': ['error', { argsIgnorePattern: '^_' }], // Allow unused args with underscore prefix
+    'react/no-unescaped-entities': 'off', // Allow unescaped entities
+    'react/no-unknown-property': 'off', // Allow Three.js properties
   },
 }

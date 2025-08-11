@@ -8,6 +8,11 @@ import Works from "./Works";
 import Feedbacks from "./Feedbacks";
 import Contact from "./Contact";
 import CanvasLoader from "./Loader";
+import StarNavigation from "./StarNavigation";
+import BasicThreeScene from "./BasicThreeScene";
+import StarMeshFactory from "./StarMeshFactory";
+import SimpleStarLabels from "./SimpleStarLabels";
+import EnhancedStarLabels from "./EnhancedStarLabels";
 
 
 export {
@@ -20,6 +25,11 @@ export {
   Feedbacks,
   Contact,
   CanvasLoader,
+  StarNavigation,
+  BasicThreeScene,
+  StarMeshFactory,
+  SimpleStarLabels,
+  EnhancedStarLabels,
   EarthCanvas, 
   BallCanvas, 
   ComputersCanvas, 

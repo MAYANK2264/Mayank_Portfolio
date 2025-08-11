@@ -1,11 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { FiMenu, FiX } from 'react-icons/fi';
 import { FaMoon, FaSun } from 'react-icons/fa';
 
-import { styles } from "../styles";
-import { logo, menu, close } from "../assets";
 
 const navLinks = [
   { id: "home", title: "Home", path: "/" },
@@ -13,10 +10,21 @@ const navLinks = [
   { id: "experience", title: "Experience", path: "/experience" },
   { id: "projects", title: "Projects", path: "/projects" },
   { id: "skills", title: "Skills", path: "/skills" },
+  { id: "certificates", title: "Certificates", path: "/certificates" },
   { id: "contact", title: "Contact", path: "/contact" }
 ];
 
-const Navbar = ({ darkMode, toggleDarkMode }) => {
+const Navbar = () => {
+  const [darkMode, setDarkMode] = useState(
+    localStorage.getItem('theme') === 'dark' ||
+    (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)
+  );
+  
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+    localStorage.setItem('theme', !darkMode ? 'dark' : 'light');
+    document.documentElement.classList.toggle('dark', !darkMode);
+  };
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
@@ -64,11 +72,8 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
               >
                 {link.title}
                 {location.pathname === link.path && (
-                  <motion.div
-                    layoutId="navbar-indicator"
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-500"
-                    initial={false}
-                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                  <div
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-500 transition-all"
                   />
                 )}
               </Link>
@@ -104,11 +109,9 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
         </div>
 
         {/* Mobile Navigation */}
-        <motion.div
-          initial={false}
-          animate={{ height: isOpen ? 'auto' : 0 }}
-          transition={{ duration: 0.3 }}
-          className="md:hidden overflow-hidden"
+        <div
+          className="md:hidden overflow-hidden transition-all duration-300"
+          style={{ height: isOpen ? 'auto' : 0 }}
         >
           <div className="py-4 space-y-2">
             {navLinks.map((link) => (
@@ -126,7 +129,7 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
               </Link>
             ))}
           </div>
-        </motion.div>
+        </div>
       </div>
     </nav>
   );

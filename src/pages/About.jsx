@@ -1,24 +1,7 @@
-import { motion } from 'framer-motion';
 import { FaCode, FaLightbulb, FaRocket, FaUserGraduate } from 'react-icons/fa';
 
-const fadeIn = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 }
-};
-
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.2
-    }
-  }
-};
-
 const AboutCard = ({ icon: Icon, title, description, delay }) => (
-  <motion.div
-    variants={fadeIn}
+  <div
     className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
   >
     <div className="flex items-center gap-4 mb-4">
@@ -28,21 +11,19 @@ const AboutCard = ({ icon: Icon, title, description, delay }) => (
       <h3 className="text-xl font-semibold">{title}</h3>
     </div>
     <p className="text-gray-600 dark:text-gray-300">{description}</p>
-  </motion.div>
+  </div>
 );
 
 const About = () => {
   return (
-    <div className="min-h-screen py-16 px-4">
-      <motion.div
-        variants={staggerContainer}
-        initial="hidden"
-        animate="visible"
+    <div 
+      className="min-h-screen py-16 px-4"
+    >
+      <div
         className="max-w-6xl mx-auto"
       >
         {/* Hero Section with Brand Statement */}
-        <motion.div
-          variants={fadeIn}
+        <div
           className="text-center mb-16"
         >
           <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-transparent bg-clip-text">
@@ -52,11 +33,10 @@ const About = () => {
             Software engineer with a passion for building scalable applications and solving complex problems.
             Specializing in full-stack development and cloud architecture.
           </p>
-        </motion.div>
+        </div>
 
         {/* Key Achievements */}
-        <motion.div 
-          variants={fadeIn}
+        <div 
           className="grid md:grid-cols-2 gap-8 mb-16"
         >
           <div className="bg-[rgb(var(--color-bg-alt))] p-8 rounded-2xl border-2 border-indigo-500/20 hover:border-indigo-500/40 transition-colors">
@@ -93,11 +73,10 @@ const About = () => {
               </li>
             </ul>
           </div>
-        </motion.div>
+        </div>
 
         {/* Education & Certifications */}
-        <motion.div
-          variants={fadeIn}
+        <div
           className="mb-16"
         >
           <div className="bg-[rgb(var(--color-bg-alt))] p-8 rounded-2xl border-2 border-pink-500/20 hover:border-pink-500/40 transition-colors">
@@ -143,11 +122,10 @@ const About = () => {
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Career Goals */}
-        <motion.div
-          variants={fadeIn}
+        <div
           className="grid md:grid-cols-3 gap-8"
         >
           <div className="bg-[rgb(var(--color-bg-alt))] p-6 rounded-2xl border-2 border-indigo-500/20 hover:border-indigo-500/40 transition-colors">
@@ -168,8 +146,8 @@ const About = () => {
               Committed to continuous learning and staying updated with industry best practices and emerging technologies.
             </p>
           </div>
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
     </div>
   );
 };
