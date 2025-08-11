@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="512" height="512" rx="128" fill="#1A1A1A"/>
+  
+  <!-- Outer hexagon -->
+  <path d="M256 56L432 149.5V336.5L256 430L80 336.5V149.5L256 56Z" 
+        stroke="#915EFF" 
+        stroke-width="8" 
+        fill="none"
+        opacity="0.3"/>
+  
+  <!-- Inner hexagon -->
+  <path d="M256 106L382 172.5V305.5L256 372L130 305.5V172.5L256 106Z" 
+        stroke="#915EFF" 
+        stroke-width="4" 
+        fill="none"
+        opacity="0.5"/>
+  
+  <!-- Code bracket left -->
+  <path d="M180 186L160 256L180 326" 
+        stroke="#915EFF" 
+        stroke-width="16" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+  
+  <!-- Code bracket right -->
+  <path d="M332 186L352 256L332 326" 
+        stroke="#915EFF" 
+        stroke-width="16" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+  
+  <!-- Letter M -->
+  <path d="M200 206V306L228 266L256 306L284 266V206" 
+        stroke="#915EFF" 
+        stroke-width="16" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"
+        fill="none"/>
+  
+  <!-- Letter C -->
+  <path d="M312 206C328 206 340 218 340 234V278C340 294 328 306 312 306" 
+        stroke="#915EFF" 
+        stroke-width="16" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"
+        fill="none"/>
+  
+  <!-- Dots representing nodes/connections -->
+  <circle cx="256" cy="106" r="8" fill="#915EFF"/>
+  <circle cx="382" cy="172.5" r="8" fill="#915EFF"/>
+  <circle cx="382" cy="305.5" r="8" fill="#915EFF"/>
+  <circle cx="256" cy="372" r="8" fill="#915EFF"/>
+  <circle cx="130" cy="305.5" r="8" fill="#915EFF"/>
+  <circle cx="130" cy="172.5" r="8" fill="#915EFF"/>
+  
+  <!-- Connecting lines -->
+  <path d="M130 172.5L160 256M352 256L382 172.5" 
+        stroke="#915EFF" 
+        stroke-width="2" 
+        opacity="0.3"/>
+  
+  <!-- Glow effect -->
+  <defs>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Apply glow to letters -->
+  <g filter="url(#glow)">
+    <path d="M200 206V306L228 266L256 306L284 266V206" 
+          stroke="#915EFF" 
+          stroke-width="2" 
+          stroke-linecap="round" 
+          stroke-linejoin="round"
+          fill="none"/>
+    
+    <path d="M312 206C328 206 340 218 340 234V278C340 294 328 306 312 306" 
+          stroke="#915EFF" 
+          stroke-width="2" 
+          stroke-linecap="round" 
+          stroke-linejoin="round"
+          fill="none"/>
+  </g>
+</svg>
